@@ -417,7 +417,7 @@ function tb_image_sizes_admin() {
 		$args = array(
 			'parent'		=> 'tools.php',
 			'page_title' 	=> __( 'Theme Blvd Image Sizes', 'tb_image_sizes' ),
-			'menu_title' 	=> __( 'TB Image sizes', 'tb_image_sizes' ),
+			'menu_title' 	=> __( 'TB Image Sizes', 'tb_image_sizes' ),
 			'cap'			=> apply_filters( 'tb_image_sizes_cap', 'edit_theme_options' )
 		);
 		
