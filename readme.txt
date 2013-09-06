@@ -50,6 +50,7 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 = 1.0.4 =
 
+* Added control for Mini Post Grid/List thumbnail sizes.
 * Fixed issue with "Current Image Size" not showing for each image section.
 
 = 1.0.3 =
