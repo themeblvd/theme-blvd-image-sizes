@@ -390,7 +390,7 @@ function tb_image_sizes_get_options() {
 	);
 
 	/*-------------------------------------------------------*/
-	/* Grid Images
+	/* Small Square Images
 	/*-------------------------------------------------------*/
 
 	$options[] = array(
