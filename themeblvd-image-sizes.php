@@ -95,6 +95,18 @@ function tb_image_sizes_get_defaults() {
 		'tb_small' => array(
 			'width' => $_wp_additional_image_sizes['tb_small']['width'],
 			'height' => $_wp_additional_image_sizes['tb_small']['height']
+		),
+		'square_small' => array(
+			'width' => $_wp_additional_image_sizes['square_small']['width'],
+			'height' => $_wp_additional_image_sizes['square_small']['height']
+		),
+		'square_smaller' => array(
+			'width' => $_wp_additional_image_sizes['square_smaller']['width'],
+			'height' => $_wp_additional_image_sizes['square_smaller']['height']
+		),
+		'square_smallest' => array(
+			'width' => $_wp_additional_image_sizes['square_smallest']['width'],
+			'height' => $_wp_additional_image_sizes['square_smallest']['height']
 		)
 	);
 	// Set crop modes
@@ -376,6 +388,115 @@ function tb_image_sizes_get_options() {
 	$options[] = array(
 		'type' => 'section_end'
 	);
+
+	/*-------------------------------------------------------*/
+	/* Grid Images
+	/*-------------------------------------------------------*/
+
+	$options[] = array(
+		'name' => __( 'Mini Thumbnails', 'tb_image_sizes' ),
+		'type' => 'heading'
+	);
+
+	// Small
+
+	$options[] = array(
+		'name'	=> __( 'Small Square', 'tb_image_sizes' ),
+		'desc'	=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "small" choice.</p><p><strong>Internal ID:</strong> square_small<br><strong>Current Image Size:</strong> '.$defaults['square_small']['width'].'x'.$defaults['square_small']['height'].'</p>', 'tb_image_sizes' ),
+		'type' 	=> 'section_start'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Width', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a width in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_small_width',
+		'std' 	=> $defaults['square_small']['width'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Height', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a height in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_small_height',
+		'std' 	=> $defaults['square_small']['height'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Crop Mode', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Select the crop mode for this image size. This is generally the one soft-cropped image size we setup and it\'s definitely okay to change this to hard crop mode. Click the <em>Help</em> tab above to learn more about crop modes.', 'tb_image_sizes' ),
+		'id' 	=> 'square_small_crop',
+		'std' 	=> $defaults['square_small']['crop'],
+		'type' 	=> 'select',
+		'options' => $crop_modes
+	);
+	$options[] = array(
+		'type' => 'section_end'
+	);
+
+	// Smaller
+
+	$options[] = array(
+		'name'	=> __( 'Smaller Square', 'tb_image_sizes' ),
+		'desc'	=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "smaller" choice.</p><p><strong>Internal ID:</strong> square_smaller<br><strong>Current Image Size:</strong> '.$defaults['square_smaller']['width'].'x'.$defaults['square_smaller']['height'].'</p>', 'tb_image_sizes' ),
+		'type' 	=> 'section_start'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Width', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a width in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smaller_width',
+		'std' 	=> $defaults['square_smaller']['width'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Height', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a height in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smaller_height',
+		'std' 	=> $defaults['square_smaller']['height'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Crop Mode', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Select the crop mode for this image size. This is generally the one soft-cropped image size we setup and it\'s definitely okay to change this to hard crop mode. Click the <em>Help</em> tab above to learn more about crop modes.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smaller_crop',
+		'std' 	=> $defaults['square_smaller']['crop'],
+		'type' 	=> 'select',
+		'options' => $crop_modes
+	);
+	$options[] = array(
+		'type' => 'section_end'
+	);
+
+	// Smallest
+
+	$options[] = array(
+		'name'	=> __( 'Smallest Square', 'tb_image_sizes' ),
+		'desc'	=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "smallest" choice.</p><p><strong>Internal ID:</strong> square_smallest<br><strong>Current Image Size:</strong> '.$defaults['square_smallest']['width'].'x'.$defaults['square_smallest']['height'].'</p>', 'tb_image_sizes' ),
+		'type' 	=> 'section_start'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Width', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a width in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smallest_width',
+		'std' 	=> $defaults['square_smallest']['width'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Height', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Insert a height in pixels.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smallest_height',
+		'std' 	=> $defaults['square_smallest']['height'],
+		'type' 	=> 'text'
+	);
+	$options[] = array(
+		'name' 	=> __( 'Crop Mode', 'tb_image_sizes' ),
+		'desc' 	=> __( 'Select the crop mode for this image size. This is generally the one soft-cropped image size we setup and it\'s definitely okay to change this to hard crop mode. Click the <em>Help</em> tab above to learn more about crop modes.', 'tb_image_sizes' ),
+		'id' 	=> 'square_smallest_crop',
+		'std' 	=> $defaults['square_smallest']['crop'],
+		'type' 	=> 'select',
+		'options' => $crop_modes
+	);
+	$options[] = array(
+		'type' => 'section_end'
+	);
+
 	return $options;
 }
 
@@ -796,6 +917,52 @@ function tb_image_sizes_apply_changes( $sizes ) {
 			$sizes['tb_small']['crop'] = true;
 		else if( $settings['tb_small_crop'] == 'false' )
 			$sizes['tb_small']['crop'] = false;
+	}
+
+	// Small Squares
+
+	if( isset( $settings['square_small_width'] ) && $settings['square_small_width'] )
+		$sizes['square_small']['width'] = $settings['square_small_width'];
+
+	if( isset( $settings['square_small_height'] ) && $settings['square_small_height'] )
+		$sizes['square_small']['height'] = $settings['square_small_height'];
+
+	if( isset( $settings['square_small_crop'] ) ) {
+		if( $settings['square_small_crop'] == 'true' )
+			$sizes['square_small']['crop'] = true;
+		else if( $settings['square_small_crop'] == 'false' )
+			$sizes['square_small']['crop'] = false;
+	}
+
+	// Smaller Squares
+
+	if( isset( $settings['square_smaller_width'] ) && $settings['square_smaller_width'] )
+		$sizes['square_smaller']['width'] = $settings['square_smaller_width'];
+
+	if( isset( $settings['square_smaller_height'] ) && $settings['square_smaller_height'] )
+		$sizes['square_smaller']['height'] = $settings['square_smaller_height'];
+
+	if( isset( $settings['square_smaller_crop'] ) ) {
+		if( $settings['square_smaller_crop'] == 'true' )
+			$sizes['square_smaller']['crop'] = true;
+		else if( $settings['square_smaller_crop'] == 'false' )
+			$sizes['square_smaller']['crop'] = false;
+	}
+
+
+	// Smallest Squares
+
+	if( isset( $settings['square_smallest_width'] ) && $settings['square_smallest_width'] )
+		$sizes['square_smallest']['width'] = $settings['square_smallest_width'];
+
+	if( isset( $settings['square_smallest_height'] ) && $settings['square_smallest_height'] )
+		$sizes['square_smallest']['height'] = $settings['square_smallest_height'];
+
+	if( isset( $settings['square_smallest_crop'] ) ) {
+		if( $settings['square_smallest_crop'] == 'true' )
+			$sizes['square_smallest']['crop'] = true;
+		else if( $settings['square_smallest_crop'] == 'false' )
+			$sizes['square_smallest']['crop'] = false;
 	}
 
 	return $sizes;
