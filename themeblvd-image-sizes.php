@@ -404,8 +404,7 @@ function tb_image_sizes_admin() {
 	if( class_exists( 'Theme_Blvd_Options_Page' ) ) {
 
 		// DEBUG - View Registered Image Sizes
-		// global $_wp_additional_image_sizes;
-		// echo '<pre>'; print_r($_wp_additional_image_sizes); echo '</pre>';
+		// echo '<pre>'; print_r($GLOBALS['_wp_additional_image_sizes']); echo '</pre>';
 
 		// Use new options system incorporated in v2.2.
 
@@ -430,14 +429,22 @@ function tb_image_sizes_admin() {
 		// Tell user about re-generate thumbnails plugin
 		add_action( 'themeblvd_admin_module_header', 'tb_image_sizes_note' );
 
-	} else {
-
-		// Initiate old-school method for framewok v2.1
-		add_action( 'init', 'tb_image_sizes_rolescheck' );
-
 	}
 }
-add_action( 'after_setup_theme', 'tb_image_sizes_admin' );
+add_action( 'init', 'tb_image_sizes_admin' );
+
+/**
+ * Run legacy admin panel for framework 2.1.
+ *
+ * @since 1.0.4
+ */
+
+function tb_image_sizes_admin_legacy() {
+	if( ! class_exists( 'Theme_Blvd_Options_Page' ) ) {
+		add_action( 'init', 'tb_image_sizes_rolescheck' );
+	}
+}
+add_action( 'after_setup_theme', 'tb_image_sizes_admin_legacy' );
 
 /**
  * Explain to user that they need to re-generate thumbnails

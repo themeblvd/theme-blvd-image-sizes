@@ -50,6 +50,8 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 = 1.0.4 =
 
+* Fixed issue with "Current Image Size" not showing for each image section.
+
 = 1.0.3 =
 
 * Added compatibility for framework v2.2.
