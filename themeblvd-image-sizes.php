@@ -229,10 +229,11 @@ add_action( 'init', 'tb_image_sizes_admin' );
 function tb_image_sizes_note(){
 
 	global $image_sizes_page;
+
     $screen = get_current_screen();
 
     if ( $screen->id == $image_sizes_page ) {
-		echo '<div style="max-width:780px"><p style="border:1px solid #dddddd;background:#f5f5f5;padding:10px;margin:10px 0 0 0">'.__( '<strong>IMPORTANT:</strong> After you change any settings on this page, they will only effect newly uploaded images moving forward. To apply changes to previously uploaded images, you must re-generate your thumbnails. Click the <em>"Help"</em> tab above to learn more about this and get more useful information about working with this plugin including an important warning disclaimer for using this plugin.', 'theme-blvd-image-sizes' ).'</div></p>';
+		echo '<div class="settings-error notice" style="border-color:#ffba00;max-width:750px;"><p><strong>'.__('Important', 'theme-blvd-image-sizes').':</strong> '.__('For settings saved to effect previously uploaded images, you must <a href="https://wordpress.org/plugins/regenerate-thumbnails/" target="_blank">regenerate your thumbnails</a>.', 'theme-blvd-image-sizes').'</div></p>';
 	}
 }
 
