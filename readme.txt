@@ -50,6 +50,8 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 = 1.0.6 - 05/29/2015 =
 
+* GlotPress compatibility.
+
 = 1.0.5 - 07/17/2014 =
 
 * Added selection for custom crop mode on all image sizes (requires WordPress 3.9+).
