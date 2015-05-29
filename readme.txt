@@ -1,7 +1,7 @@
 === Theme Blvd Image Sizes ===
 Contributors: themeblvd
 Tags: themeblvd, images, add_image_size, crop
-Requires at least: Theme Blvd Framework 2.1
+Requires at least: Theme Blvd Framework 2.2
 Stable tag: 1.0.6
 
 When using a theme with Theme Blvd framework version 2.1+, this plugin is will allow to change your theme's image sizes.
@@ -48,9 +48,11 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 == Changelog ==
 
-= 1.0.6 - 05/29/2015 =
+= 1.1.0 - 05/29/2015 =
 
 * GlotPress compatibility.
+* Added compatibility for themes with Theme Blvd Framework 2.5+.
+* Removed compatibility for themes prior to Theme Blvd Framework 2.2.
 
 = 1.0.5 - 07/17/2014 =
 

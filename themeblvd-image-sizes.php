@@ -2,7 +2,7 @@
 /*
 Plugin Name: Theme Blvd Image Sizes
 Description: Adjust the image crop sizes in a Theme Blvd theme through your WordPress admin.
-Version: 1.0.6
+Version: 1.1.0
 Author: Jason Bobich
 Author URI: http://jasonbobich.com
 License: GPL2
@@ -25,7 +25,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'TB_IMAGE_SIZES_PLUGIN_VERSION', '1.0.6' );
+define( 'TB_IMAGE_SIZES_PLUGIN_VERSION', '1.1.0' );
 define( 'TB_IMAGE_SIZES_PLUGIN_DIR', dirname( __FILE__ ) );
 define( 'TB_IMAGE_SIZES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
 
@@ -48,78 +48,13 @@ add_action( 'init', 'tb_image_sizes_textdomain' );
  */
 function tb_image_sizes_warning() {
 	echo '<div class="updated">';
-	echo '<p>'.__( 'You currently have the "Theme Blvd Image Sizes" plugin activated, however you are not using a theme with Theme Blvd Framework v2.1+, and so this plugin will not do anything.', 'theme-blvd-image-sizes' ).'</p>';
+	echo '<p>'.__( 'You currently have the "Theme Blvd Image Sizes" plugin activated, however you are not using a theme with Theme Blvd Framework v2.2+, and so this plugin will not do anything.', 'theme-blvd-image-sizes' ).'</p>';
 	echo '</div>';
 }
 
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
 /* Setup Default Text Strings and Options
-/*-----------------------------------------------------------------------------------*/
-
-/**
- * Get defaults
- *
- * @since 1.0.0
- */
-function tb_image_sizes_get_defaults() {
-
-	global $_wp_additional_image_sizes;
-
-	// Set widths/heights
-	$defaults = array(
-		'slider-large' => array(
-			'width' => $_wp_additional_image_sizes['slider-large']['width'],
-			'height' => $_wp_additional_image_sizes['slider-large']['height']
-		),
-		'slider-staged' => array(
-			'width' => $_wp_additional_image_sizes['slider-staged']['width'],
-			'height' => $_wp_additional_image_sizes['slider-staged']['height']
-		),
-		'grid_fifth_1' => array(
-			'width' => $_wp_additional_image_sizes['grid_fifth_1']['width'],
-			'height' => $_wp_additional_image_sizes['grid_fifth_1']['height']
-		),
-		'grid_3' => array(
-			'width' => $_wp_additional_image_sizes['grid_3']['width'],
-			'height' => $_wp_additional_image_sizes['grid_3']['height']
-		),
-		'grid_4' => array(
-			'width' => $_wp_additional_image_sizes['grid_4']['width'],
-			'height' => $_wp_additional_image_sizes['grid_4']['height']
-		),
-		'grid_6' => array(
-			'width' => $_wp_additional_image_sizes['grid_6']['width'],
-			'height' => $_wp_additional_image_sizes['grid_6']['height']
-		),
-		'tb_small' => array(
-			'width' => $_wp_additional_image_sizes['tb_small']['width'],
-			'height' => $_wp_additional_image_sizes['tb_small']['height']
-		),
-		'square_small' => array(
-			'width' => $_wp_additional_image_sizes['square_small']['width'],
-			'height' => $_wp_additional_image_sizes['square_small']['height']
-		),
-		'square_smaller' => array(
-			'width' => $_wp_additional_image_sizes['square_smaller']['width'],
-			'height' => $_wp_additional_image_sizes['square_smaller']['height']
-		),
-		'square_smallest' => array(
-			'width' => $_wp_additional_image_sizes['square_smallest']['width'],
-			'height' => $_wp_additional_image_sizes['square_smallest']['height']
-		)
-	);
-
-	// Set crop modes
-	foreach ( $defaults as $id => $size ) {
-		if ( $_wp_additional_image_sizes[$id]['crop'] ) {
-			$defaults[$id]['crop'] = 'true';
-		} else {
-			$defaults[$id]['crop'] = 'false';
-		}
-	}
-
-	return $defaults;
-}
+/*----------------------------------------------------*/
 
 /**
  * Get Options to pass into Option Framework's function to generate form.
@@ -128,8 +63,7 @@ function tb_image_sizes_get_defaults() {
  */
 function tb_image_sizes_get_options() {
 
-	// Grab default values for current theme
-	$defaults = tb_image_sizes_get_defaults();
+	$sizes = themeblvd_get_image_sizes();
 
 	// Crop mode options
 	$crop_modes = array(
@@ -150,635 +84,100 @@ function tb_image_sizes_get_options() {
 		'bottom'	=> __('Bottom', 'theme-blvd-image-sizes')
 	);
 
-	/*-------------------------------------------------------*/
-	/* Slider Images
-	/*-------------------------------------------------------*/
+	// Setup options
+	$options = array();
 
-	$options[] = array(
-		'name'		=> __( 'Slider Images', 'theme-blvd-image-sizes' ),
-		'type'		=> 'heading'
-	);
+	foreach ( $sizes as $size => $atts ) {
 
-	// Full-Width Slide Images
+		$crop = 'soft';
 
-	$options[] = array(
-		'name'		=> __( 'Full-Width Slide Images', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in full-width slides of your sliders. If your slider consists of only full-width image slides, this image size will <em>generally</em> determine the height.</p><p><strong>WARNING:</strong> When this size was originally created, it was targeted for the maximum size of a slider. This is imperative because sliders can get used in so many places with different widths within your current theme\'s responsive structure. So, for example, when you use the slider within the content of a 2-column page, the size will not actually be what you designate here, but will be shrinked down proportinally. Edit at your own risk!</p><p><strong>Internal ID:</strong> slider-large<br><strong>Current Image Size:</strong> '.$defaults['slider-large']['width'].'x'.$defaults['slider-large']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-large_width',
-		'std' 		=> $defaults['slider-large']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-large_height',
-		'std' 		=> $defaults['slider-large']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-large_crop',
-		'std' 		=> $defaults['slider-large']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-large_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-large_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		if ( $atts['crop'] ) {
+			$crop = 'hard';
+		}
 
-	// Staged Slide Images
+		$desc = sprintf('%s: %sx%s (%s %s)', __('Theme Default', 'theme-blvd-image-sizes'), $atts['width'], $atts['height'], $crop, __('crop', 'theme-blvd-image-sizes'));
 
-	$options[] = array(
-		'name'		=> __( 'Staged Slide Images', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in slides of your sliders with staged images (i.e. images aligned right or left). <em>Generally</em> when we design the height of the slider, we base it around the proportional size of the full-width slide image size from above. This staged image size can also vary from theme-to-theme depending on the theme\'s CSS stylings of the slider.</p><p><strong>WARNING:</strong> When this size was originally created, it was targeted for the maximum size of a slider and also designed to compensate both the theme\'s slider CSS along with the dimensions of the full-width slide image size from above. This is all imperative because sliders can get used in so many places with different widths within your current theme\'s responsive structure. So, for example, when you use the slider within the content of a 2-column page, the size will not actually be what you designate here, but will be shrinked down proportinally. This all makes editing this size even trickier than the full-width size above; so again, edit at your own risk!</p><p><strong>Internal ID:</strong> slider-staged<br><strong>Current Image Size:</strong> '.$defaults['slider-staged']['width'].'x'.$defaults['slider-staged']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-staged_width',
-		'std' 		=> $defaults['slider-staged']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-staged_height',
-		'std' 		=> $defaults['slider-staged']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-staged_crop',
-		'std' 		=> $defaults['slider-staged']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-staged_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'slider-staged_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		if ( $crop == 'soft' ) {
+			$crop = 'false';
+		} else {
+			$crop = 'true';
+		}
 
-	/*-------------------------------------------------------*/
-	/* Grid Images
-	/*-------------------------------------------------------*/
+		$size = str_replace( '-', '_', $size );
 
-	$options[] = array(
-		'name' 		=> __( 'Grid Images', 'tb_image_sizes' ),
-		'type' 		=> 'heading'
-	);
+		$options[] = array(
+			'name'		=> $atts['name'],
+			'desc'		=> $desc,
+			'type' 		=> 'section_start'
+		);
 
-	// 1/5
+		$options[] = array(
+			'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
+			'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
+			'id' 		=> $size.'_width',
+			'std' 		=> $atts['width'],
+			'type' 		=> 'text'
+		);
 
-	$options[] = array(
-		'name'		=> __( '1/5 Columns', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in columns that are set as 1/5. Keep in mind that because of the responsive structure of your theme and the virtually infinite possibilities of setting up columns, your images of this size will rarely show at the the exact dimensions that you enter here. However, they will always be scaled proportionally to the dimensions you set here.</p><p><strong>Internal ID:</strong> grid_fifth_1<br><strong>Current Image Size:</strong> '.$defaults['grid_fifth_1']['width'].'x'.$defaults['grid_fifth_1']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_fifth_1_width',
-		'std' 		=> $defaults['grid_fifth_1']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_fifth_1_height',
-		'std' 		=> $defaults['grid_fifth_1']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_fifth_1_crop',
-		'std' 		=> $defaults['grid_fifth_1']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_fifth_1_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_fifth_1_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		$options[] = array(
+			'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
+			'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
+			'id' 		=> $size.'_height',
+			'std' 		=> $atts['height'],
+			'type' 		=> 'text'
+		);
 
-	// 1/4
+		$options[] = array(
+			'type' 		=> 'subgroup_start',
+			'class'		=> 'show-hide-toggle'
+		);
 
-	$options[] = array(
-		'name'		=> __( '1/4 Columns', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in columns that are set as 1/4. Keep in mind that because of the responsive structure of your theme and the virtually infinite possibilities of setting up columns, your images of this size will rarely show at the the exact dimensions that you enter here. However, they will always be scaled proportionally to the dimensions you set here.</p><p><strong>Internal ID:</strong> grid_3<br><strong>Current Image Size:</strong> '.$defaults['grid_3']['width'].'x'.$defaults['grid_3']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes'),
-		'id' 		=> 'grid_3_width',
-		'std' 		=> $defaults['grid_3']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_3_height',
-		'std' 		=> $defaults['grid_3']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_3_crop',
-		'std' 		=> $defaults['grid_3']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_3_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_3_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		$options[] = array(
+			'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
+			'desc' 		=> __( 'Select the crop mode for this image size.', 'theme-blvd-image-sizes' ),
+			'id' 		=> $size.'_crop',
+			'std' 		=> $crop,
+			'type' 		=> 'select',
+			'options' 	=> $crop_modes,
+			'class'		=> 'trigger'
+		);
 
-	// 1/3
+		$options[] = array(
+			'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
+			'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
+			'id' 		=> $size.'_x_crop_position',
+			'std' 		=> 'center',
+			'type' 		=> 'select',
+			'options' 	=> $crop_positions_x,
+			'class'		=> 'hide receiver receiver-custom'
+		);
 
-	$options[] = array(
-		'name'		=> __( '1/3 Columns', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in columns that are set as 1/3. Keep in mind that because of the responsive structure of your theme and the virtually infinite possibilities of setting up columns, your images of this size will rarely show at the the exact dimensions that you enter here. However, they will always be scaled proportionally to the dimensions you set here.</p><p><strong>Internal ID:</strong> grid_4<br><strong>Current Image Size:</strong> '.$defaults['grid_4']['width'].'x'.$defaults['grid_4']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_4_width',
-		'std' 		=> $defaults['grid_4']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_4_height',
-		'std' 		=> $defaults['grid_4']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_4_crop',
-		'std' 		=> $defaults['grid_4']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_4_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_4_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		$options[] = array(
+			'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
+			'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
+			'id' 		=> $size.'_y_crop_position',
+			'std' 		=> 'center',
+			'type' 		=> 'select',
+			'options' 	=> $crop_positions_y,
+			'class'		=> 'hide receiver receiver-custom'
+		);
 
-	// 1/2
+		$options[] = array(
+			'type' 		=> 'subgroup_end'
+		);
 
-	$options[] = array(
-		'name'		=> __( '1/2 Columns', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>This size applies to images used in columns that are set as 1/2. Keep in mind that because of the responsive structure of your theme and the virtually infinite possibilities of setting up columns, your images of this size will rarely show at the the exact dimensions that you enter here. However, they will always be scaled proportionally to the dimensions you set here.</p><p><strong>Internal ID:</strong> grid_6<br><strong>Current Image Size:</strong> '.$defaults['grid_6']['width'].'x'.$defaults['grid_6']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_6_width',
-		'std' 		=> $defaults['grid_6']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_6_height',
-		'std' 		=> $defaults['grid_6']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_6_crop',
-		'std' 		=> $defaults['grid_6']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_6_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'grid_6_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
+		$options[] = array(
+			'type' 		=> 'section_end'
+		);
 
-	/*-------------------------------------------------------*/
-	/* Thumbnails
-	/*-------------------------------------------------------*/
+	}
 
-	$options[] = array(
-		'name' 		=> __( 'Thumbnails', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'heading'
-	);
-	$options[] = array(
-		'name'		=> __( 'Small Thumbnails', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>When you setup a standard Post List or you\'re dealing with single posts, and in your options you select to show "small thumbnails" this is the size that will get used. Unlike the other image sizes in this plugin, this image size will show the true image dimensions without scaling in most scenarios.</p><p><strong>Internal ID:</strong> small<br><strong>Current Image Size:</strong> '.$defaults['tb_small']['width'].'x'.$defaults['tb_small']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'tb_small_width',
-		'std' 		=> $defaults['tb_small']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'tb_small_height',
-		'std' 		=> $defaults['tb_small']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'tb_small_crop',
-		'std' 		=> $defaults['tb_small']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'tb_small_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'tb_small_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
-
-	/*-------------------------------------------------------*/
-	/* Small Square Images
-	/*-------------------------------------------------------*/
-
-	$options[] = array(
-		'name' 		=> __( 'Mini Thumbnails', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'heading'
-	);
-
-	// Small
-
-	$options[] = array(
-		'name'		=> __( 'Small Square', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "small" choice.</p><p><strong>Internal ID:</strong> square_small<br><strong>Current Image Size:</strong> '.$defaults['square_small']['width'].'x'.$defaults['square_small']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'tb_image_sizes' ),
-		'id' 		=> 'square_small_width',
-		'std' 		=> $defaults['square_small']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_small_height',
-		'std' 		=> $defaults['square_small']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_small_crop',
-		'std' 		=> $defaults['square_small']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_small_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_small_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
-
-	// Smaller
-
-	$options[] = array(
-		'name'		=> __( 'Smaller Square', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "smaller" choice.</p><p><strong>Internal ID:</strong> square_smaller<br><strong>Current Image Size:</strong> '.$defaults['square_smaller']['width'].'x'.$defaults['square_smaller']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smaller_width',
-		'std' 		=> $defaults['square_smaller']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smaller_height',
-		'std' 		=> $defaults['square_smaller']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smaller_crop',
-		'std' 		=> $defaults['square_smaller']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smaller_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smaller_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
-
-	// Smallest
-
-	$options[] = array(
-		'name'		=> __( 'Smallest Square', 'theme-blvd-image-sizes' ),
-		'desc'		=> __( '<p>When you\'re working with a Mini Post Grid or Mini Post List, this is the "smallest" choice.</p><p><strong>Internal ID:</strong> square_smallest<br><strong>Current Image Size:</strong> '.$defaults['square_smallest']['width'].'x'.$defaults['square_smallest']['height'].'</p>', 'theme-blvd-image-sizes' ),
-		'type' 		=> 'section_start'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Width', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a width in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smallest_width',
-		'std' 		=> $defaults['square_smallest']['width'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Height', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Insert a height in pixels.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smallest_height',
-		'std' 		=> $defaults['square_smallest']['height'],
-		'type' 		=> 'text'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_start',
-		'class'		=> 'show-hide-toggle'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Crop Mode', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select the crop mode for this image size. We would advise that you do not change the crop mode for this image size. Click the <em>Help</em> tab above to learn more about crop modes.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smallest_crop',
-		'std' 		=> $defaults['square_smallest']['crop'],
-		'type' 		=> 'select',
-		'options' 	=> $crop_modes,
-		'class'		=> 'trigger'
-	);
-	$options[] = array(
-		'name' 		=> __( 'X-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the x-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smallest_x_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_x,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'name' 		=> __( 'Y-axis Crop Position', 'theme-blvd-image-sizes' ),
-		'desc' 		=> __( 'Select from where you\'d like the image croped on the y-axis.', 'theme-blvd-image-sizes' ),
-		'id' 		=> 'square_smallest_y_crop_position',
-		'std' 		=> 'center',
-		'type' 		=> 'select',
-		'options' 	=> $crop_positions_y,
-		'class'		=> 'hide receiver receiver-custom'
-	);
-	$options[] = array(
-		'type' 		=> 'subgroup_end'
-	);
-	$options[] = array(
-		'type' 		=> 'section_end'
-	);
-
-	return $options;
+	return apply_filters('tb_image_sizes_options', $options);
 }
 
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
 /* Setup Admin Page
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
 
 /**
  * Run admin panel
@@ -787,59 +186,38 @@ function tb_image_sizes_get_options() {
  */
 function tb_image_sizes_admin() {
 
-	// Check to make sure Theme Blvd Framework 2.0+ is running
-	if ( ! defined( 'TB_FRAMEWORK_VERSION' ) || version_compare( TB_FRAMEWORK_VERSION, '2.1.0', '<' ) ) {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	global $_tb_string_swap_admin;
+	global $image_sizes_page;
+
+	// Check to make sure Theme Blvd Framework 2.2+ is running
+	if ( ! defined( 'TB_FRAMEWORK_VERSION' ) || version_compare( TB_FRAMEWORK_VERSION, '2.2.0', '<' ) ) {
 		add_action( 'admin_notices', 'tb_image_sizes_warning' );
 		return;
 	}
 
-	// If using framework v2.2+, we can use the framework's
-	// internal options system and if not, we can do it the
-	// old-fashioned way.
+	// Add options page
+	$args = array(
+		'parent'		=> 'tools.php',
+		'page_title' 	=> __( 'Theme Blvd Image Sizes', 'theme-blvd-image-sizes' ),
+		'menu_title' 	=> __( 'TB Image Sizes', 'theme-blvd-image-sizes' ),
+		'cap'			=> apply_filters( 'tb_image_sizes_cap', 'edit_theme_options' )
+	);
 
-	if ( class_exists( 'Theme_Blvd_Options_Page' ) ) {
+	$_tb_string_swap_admin = new Theme_Blvd_Options_Page( 'tb_image_sizes', tb_image_sizes_get_options(), $args );
 
-		// DEBUG - View Registered Image Sizes
-		// echo '<pre>'; print_r($GLOBALS['_wp_additional_image_sizes']); echo '</pre>';
+	// Add "Help" tab
+	$image_sizes_page = 'tools_page_tb_image_sizes';
+	add_action( 'load-'.$image_sizes_page, 'tb_image_sizes_help' );
 
-		// Use new options system incorporated in v2.2.
+	// Tell user about re-generate thumbnails plugin
+	add_action( 'themeblvd_admin_module_header', 'tb_image_sizes_note' );
 
-		global $_tb_string_swap_admin;
-		global $image_sizes_page;
-
-		$options = tb_image_sizes_get_options();
-
-		$args = array(
-			'parent'		=> 'tools.php',
-			'page_title' 	=> __( 'Theme Blvd Image Sizes', 'theme-blvd-image-sizes' ),
-			'menu_title' 	=> __( 'TB Image Sizes', 'theme-blvd-image-sizes' ),
-			'cap'			=> apply_filters( 'tb_image_sizes_cap', 'edit_theme_options' )
-		);
-
-		$_tb_string_swap_admin = new Theme_Blvd_Options_Page( 'tb_image_sizes', $options, $args );
-
-		// Add "Help" tab
-		$image_sizes_page = 'tools_page_tb_image_sizes';
-		add_action( 'load-'.$image_sizes_page, 'tb_image_sizes_help' );
-
-		// Tell user about re-generate thumbnails plugin
-		add_action( 'themeblvd_admin_module_header', 'tb_image_sizes_note' );
-
-	}
 }
 add_action( 'init', 'tb_image_sizes_admin' );
-
-/**
- * Run legacy admin panel for framework 2.1.
- *
- * @since 1.0.4
- */
-function tb_image_sizes_admin_legacy() {
-	if ( ! class_exists( 'Theme_Blvd_Options_Page' ) ) {
-		add_action( 'init', 'tb_image_sizes_rolescheck' );
-	}
-}
-add_action( 'after_setup_theme', 'tb_image_sizes_admin_legacy' );
 
 /**
  * Explain to user that they need to re-generate thumbnails
@@ -857,119 +235,9 @@ function tb_image_sizes_note(){
 	}
 }
 
-/**
- * Hook everything in to being the process only if the user can
- * edit theme options, or else no use running this plugin.
- *
- * NOTE: Only used with framework v2.1
- *
- * @since 1.0.0
- */
-function tb_image_sizes_rolescheck (){
-	if ( current_user_can( 'edit_theme_options' ) ) {
-		add_action( 'admin_init', 'tb_image_sizes_init' );
-		add_action( 'admin_menu', 'tb_image_sizes_add_page');
-	}
-}
-
-/**
- * Add a menu page for this plugin.
- *
- * NOTE: Only used with framework v2.1
- *
- * @since 1.0.0
- */
-function tb_image_sizes_add_page() {
-
-	global $image_sizes_page;
-
-	// Create sub menu page
-	$image_sizes_page = add_submenu_page( 'tools.php', 'TB Image Sizes', 'TB Image Sizes', 'administrator', 'tb_image_sizes', 'tb_image_sizes_page' );
-
-	// Adds actions to hook in the required css and javascript
-	add_action( "admin_print_styles-$image_sizes_page", 'optionsframework_load_styles' );
-	add_action( "admin_print_scripts-$image_sizes_page", 'optionsframework_load_scripts' );
-	add_action( "admin_print_styles-$image_sizes_page", 'optionsframework_mlu_css', 0 );
-	add_action( "admin_print_scripts-$image_sizes_page", 'optionsframework_mlu_js', 0 );
-
-	// Add Contextual help
-	add_action('load-'.$image_sizes_page, 'tb_image_sizes_help');
-}
-
-/**
- * Inititate anything needed for the plugin.
- *
- * NOTE: Only used with framework v2.1
- *
- * @since 1.0.0
- */
-function tb_image_sizes_init() {
-	// Register settings
-	register_setting( 'tb_image_sizes_settings', 'tb_image_sizes', 'tb_image_sizes_validate' );
-}
-
-/**
- * Validate settings when updated.
- *
- * Note: This function realistically has more than it needs.
- * In this specific plugin, we're only working with a couple kinds
- * of options, which are the "text" and "select" type of option, however
- * I'm keeping all validation types in this plugin as to setup
- * a nice model for making more plugins in the future that
- * may also include different kinds of options.
- *
- * NOTE: Only used with framework v2.1
- *
- * @since 1.0.0
- */
-function tb_image_sizes_validate( $input ) {
-
-	// Reset Settings
-	if ( isset( $_POST['reset'] ) ) {
-		$empty = array();
-		add_settings_error( 'tb_image_sizes', 'restore_defaults', __( 'Default options restored.', 'theme-blvd-image-sizes' ), 'updated fade' );
-		return $empty;
-	}
-
-	// Save Options
-	if ( isset( $_POST['update'] ) && isset( $_POST['options'] ) ) {
-
-		$clean = array();
-		$options = tb_image_sizes_get_options();
-
-		foreach ( $options as $option ) {
-
-			// Verify we have what need from options
-			if ( ! isset( $option['id'] ) ) continue;
-			if ( ! isset( $option['type'] ) ) continue;
-
-			$id = preg_replace( '/\W/', '', strtolower( $option['id'] ) );
-
-			// Set checkbox to false if it wasn't sent in the $_POST['options']
-			if ( 'checkbox' == $option['type'] && ! isset( $_POST['options'][$id] ) ) {
-				$_POST['options'][$id] = '0';
-			}
-
-			// Set each item in the multicheck to false if it wasn't sent in the $_POST['options']
-			if ( 'multicheck' == $option['type'] && ! isset( $_POST['options'][$id] ) ) {
-				foreach ( $option['options'] as $key => $value ) {
-					$_POST['options'][$id][$key] = '0';
-				}
-			}
-
-			// For a value to be submitted to database it must pass through a sanitization filter
-			if ( has_filter( 'of_sanitize_' . $option['type'] ) ) {
-				$clean[$id] = apply_filters( 'of_sanitize_' . $option['type'], $_POST['options'][$id], $option );
-			}
-		}
-		add_settings_error( 'tb_image_sizes', 'save_options', __( 'Options saved.', 'tb_image_sizes' ), 'updated fade' );
-		return $clean;
-	}
-}
-
-/*-----------------------------------------------------------------------------------*/
-/* Display Admin Page
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
+/* Help Tab
+/*----------------------------------------------------*/
 
 /**
  * Build contextual help tab
@@ -1033,60 +301,9 @@ function tb_image_sizes_help() {
     );
 }
 
-/**
- * Builds out the full admin page.
- *
- * NOTE: Only used with framework v2.1
- *
- * @since 1.0.0
- */
-function tb_image_sizes_page() {
-
-	// DEBUG - View Saved Options
-	// $settings = get_option('tb_image_sizes');
-	// echo '<pre>'; print_r($settings); echo '</pre>';
-
-	// DEBUG - View Registered Image Sizes
-	// global $_wp_additional_image_sizes;
-	// echo '<pre>'; print_r($_wp_additional_image_sizes); echo '</pre>';
-
-	// Build form
-	$options = tb_image_sizes_get_options();
-	$settings = get_option('tb_image_sizes');
-	$form = optionsframework_fields( 'options', $options, $settings, true );
-	settings_errors();
-	?>
-	<div id="tb_image_sizes">
-		<div class="wrap">
-		    <?php screen_icon( 'themes' ); ?>
-		    <h2 class="nav-tab-wrapper">
-		        <?php echo $form[1]; ?>
-		    </h2>
-		    <div class="metabox-holder">
-			    <div id="optionsframework">
-			    	<p style="border:1px solid #dddddd;background:#f5f5f5;padding:10px;margin:0 0 15px 0"><?php _e( '<strong>IMPORTANT:</strong> After you change any settings on this page, they will only effect newly uploaded images moving forward. To apply changes to previously uploaded images, you must re-generate your thumbnails. Click the <em>"Help"</em> tab above to learn more about this and get more useful information about working with this plugin including an important warning disclaimer for using this plugin.', 'tb_image_sizes' ); ?></p>
-					<form action="options.php" method="post">
-						<?php settings_fields('tb_image_sizes_settings'); ?>
-						<?php echo $form[0]; /* Settings */ ?>
-				        <div id="optionsframework-submit">
-							<input type="submit" class="button-primary" name="update" value="<?php esc_attr_e( 'Save Options' ); ?>" />
-				            <input type="submit" class="reset-button button-secondary" name="reset" value="<?php esc_attr_e( 'Restore Defaults' ); ?>" onclick="return confirm( '<?php print esc_js( __( 'Click OK to reset. Any theme settings will be lost!', TB_GETTEXT_DOMAIN ) ); ?>' );" />
-				            <div class="clear"></div>
-						</div><!-- #optionsframework-submit (end) -->
-					</form>
-					<div class="tb-footer-text">
-						<?php do_action( 'themeblvd_options_footer_text' ); ?>
-					</div><!-- .tb-footer-text (end) -->
-				</div><!-- #optionsframework (end) -->
-			</div><!-- .metabox-holder (end) -->
-		</div><!-- .wrap (end) -->
-	</div><!-- #tb_image_sizes (end) -->
-	<?php
-}
-
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
 /* Filter changes
-/*-----------------------------------------------------------------------------------*/
+/*----------------------------------------------------*/
 
 /**
  * Primary Filter
@@ -1099,214 +316,35 @@ function tb_image_sizes_page() {
  */
 function tb_image_sizes_apply_changes( $sizes ) {
 
-	// DEBUG - View Saved Options
-	// $settings = get_option('tb_image_sizes');
-	// echo '<pre>'; print_r($settings); echo '</pre>';
-
-	// Get current settings
 	$settings = get_option('tb_image_sizes');
 
-	// Full Width Image Slides
+	// DEBUG - View Saved Options
+	// echo '<pre>'; print_r($settings); echo '</pre>';
 
-	if ( isset( $settings['sliderlarge_width'] ) && $settings['sliderlarge_width'] ) {
-		$sizes['slider-large']['width'] = $settings['sliderlarge_width'];
-	}
+	foreach ( $sizes as $size => $atts ) {
 
-	if ( isset( $settings['sliderlarge_height'] ) && $settings['sliderlarge_height'] ) {
-		$sizes['slider-large']['height'] = $settings['sliderlarge_height'];
-	}
+		$key = str_replace( '-', '_', $size );
 
-	if ( isset( $settings['sliderlarge_crop'] ) ) {
-		if ( $settings['sliderlarge_crop'] == 'true' ) {
-			$sizes['slider-large']['crop'] = true;
-		} else if ( $settings['sliderlarge_crop'] == 'false' ) {
-			$sizes['slider-large']['crop'] = false;
-		} else if ( $settings['sliderlarge_crop'] == 'custom'  ) {
-			$sizes['slider-large']['crop'] = array( $settings['sliderlarge_x_crop_position'], $settings['sliderlarge_y_crop_position'] );
+		if ( isset( $settings[$key.'_width'] ) && $settings[$key.'_width'] ) {
+			$sizes[$size]['width'] = $settings[$key.'_width'];
 		}
-	}
 
-	// Staged Image Slides
-
-	if ( isset( $settings['sliderstaged_width'] ) && $settings['sliderstaged_width'] ) {
-		$sizes['slider-staged']['width'] = $settings['sliderstaged_width'];
-	}
-
-	if ( isset( $settings['sliderstaged_height'] ) && $settings['sliderstaged_height'] ) {
-		$sizes['slider-staged']['height'] = $settings['sliderstaged_height'];
-	}
-
-	if ( isset( $settings['sliderstagede_crop'] ) ) {
-		if ( $settings['sliderstagede_crop'] == 'true' ) {
-			$sizes['slider-staged']['crop'] = true;
-		} else if ( $settings['sliderstagede_crop'] == 'false' ) {
-			$sizes['slider-staged']['crop'] = false;
-		} else if ( $settings['sliderstagede_crop'] == 'custom'  ) {
-			$sizes['slider-staged']['crop'] = array( $settings['sliderstagede_x_crop_position'], $settings['sliderstagede_y_crop_position'] );
+		if ( isset( $settings[$key.'_height'] ) && $settings[$key.'_height'] ) {
+			$sizes[$size]['height'] = $settings[$key.'_height'];
 		}
-	}
 
-	// 1/5
-
-	if ( isset( $settings['grid_fifth_1_width'] ) && $settings['grid_fifth_1_width'] ) {
-		$sizes['grid_fifth_1']['width'] = $settings['grid_fifth_1_width'];
-	}
-
-	if ( isset( $settings['grid_fifth_1_height'] ) && $settings['grid_fifth_1_height'] ) {
-		$sizes['grid_fifth_1']['height'] = $settings['grid_fifth_1_height'];
-	}
-
-	if ( isset( $settings['grid_fifth_1_crop'] ) ) {
-		if ( $settings['grid_fifth_1_crop'] == 'true' ) {
-			$sizes['grid_fifth_1']['crop'] = true;
-		} else if ( $settings['grid_fifth_1_crop'] == 'false' ) {
-			$sizes['grid_fifth_1']['crop'] = false;
-		} else if ( $settings['grid_fifth_1_crop'] == 'custom'  ) {
-			$sizes['grid_fifth_1']['crop'] = array( $settings['grid_fifth_1_x_crop_position'], $settings['grid_fifth_1_y_crop_position'] );
+		if ( isset( $settings['sliderlarge_crop'] ) ) {
+			if ( $settings[$key.'_crop'] == 'true' ) {
+				$sizes[$size]['crop'] = true;
+			} else if ( $settings[$key.'_crop'] == 'false' ) {
+				$sizes[$size]['crop'] = false;
+			} else if ( $settings[$key.'_crop'] == 'custom'  ) {
+				$sizes[$size]['crop'] = array( $settings[$key.'_x_crop_position'], $settings[$key.'_y_crop_position'] );
+			}
 		}
+
 	}
 
-	// 1/4
-
-	if ( isset( $settings['grid_3_width'] ) && $settings['grid_3_width'] ) {
-		$sizes['grid_3']['width'] = $settings['grid_3_width'];
-	}
-
-	if ( isset( $settings['grid_3_height'] ) && $settings['grid_3_height'] ) {
-		$sizes['grid_3']['height'] = $settings['grid_3_height'];
-	}
-
-	if ( isset( $settings['grid_3_crop'] ) ) {
-		if ( $settings['grid_3_crop'] == 'true' ) {
-			$sizes['grid_3']['crop'] = true;
-		} else if ( $settings['grid_3_crop'] == 'false' ) {
-			$sizes['grid_3']['crop'] = false;
-		} else if ( $settings['grid_3_crop'] == 'custom'  ) {
-			$sizes['grid_3']['crop'] = array( $settings['grid_3_x_crop_position'], $settings['grid_3_y_crop_position'] );
-		}
-	}
-
-	// 1/3
-
-	if ( isset( $settings['grid_4_width'] ) && $settings['grid_4_width'] ) {
-		$sizes['grid_4']['width'] = $settings['grid_4_width'];
-	}
-
-	if ( isset( $settings['grid_4_height'] ) && $settings['grid_4_height'] ) {
-		$sizes['grid_4']['height'] = $settings['grid_4_height'];
-	}
-
-	if ( isset( $settings['grid_4_crop'] ) ) {
-		if ( $settings['grid_4_crop'] == 'true' ) {
-			$sizes['grid_4']['crop'] = true;
-		} else if ( $settings['grid_4_crop'] == 'false' ) {
-			$sizes['grid_4']['crop'] = false;
-		} else if ( $settings['grid_4_crop'] == 'custom'  ) {
-			$sizes['grid_4']['crop'] = array( $settings['grid_4_x_crop_position'], $settings['grid_4_y_crop_position'] );
-		}
-	}
-
-	// 1/2
-
-	if ( isset( $settings['grid_6_width'] ) && $settings['grid_6_width'] ) {
-		$sizes['grid_6']['width'] = $settings['grid_6_width'];
-	}
-
-	if ( isset( $settings['grid_6_height'] ) && $settings['grid_6_height'] ) {
-		$sizes['grid_6']['height'] = $settings['grid_6_height'];
-	}
-
-	if ( isset( $settings['grid_6_crop'] ) ) {
-		if ( $settings['grid_6_crop'] == 'true' ) {
-			$sizes['grid_6']['crop'] = true;
-		} else if ( $settings['grid_6_crop'] == 'false' ) {
-			$sizes['grid_6']['crop'] = false;
-		} else if ( $settings['grid_6_crop'] == 'custom'  ) {
-			$sizes['grid_6']['crop'] = array( $settings['grid_6_x_crop_position'], $settings['grid_6_y_crop_position'] );
-		}
-	}
-
-	// Small Thumbs
-
-	if ( isset( $settings['tb_small_width'] ) && $settings['tb_small_width'] ) {
-		$sizes['tb_small']['width'] = $settings['tb_small_width'];
-	}
-
-	if ( isset( $settings['tb_small_height'] ) && $settings['tb_small_height'] ) {
-		$sizes['tb_small']['height'] = $settings['tb_small_height'];
-	}
-
-	if ( isset( $settings['tb_small_crop'] ) ) {
-		if ( $settings['tb_small_crop'] == 'true' ) {
-			$sizes['tb_small']['crop'] = true;
-		} else if ( $settings['tb_small_crop'] == 'false' ) {
-			$sizes['tb_small']['crop'] = false;
-		} else if ( $settings['tb_small_crop'] == 'custom'  ) {
-			$sizes['tb_small']['crop'] = array( $settings['tb_small_x_crop_position'], $settings['tb_small_y_crop_position'] );
-		}
-	}
-
-	// Small Squares
-
-	if ( isset( $settings['square_small_width'] ) && $settings['square_small_width'] ) {
-		$sizes['square_small']['width'] = $settings['square_small_width'];
-	}
-
-	if ( isset( $settings['square_small_height'] ) && $settings['square_small_height'] ) {
-		$sizes['square_small']['height'] = $settings['square_small_height'];
-	}
-
-	if ( isset( $settings['square_small_crop'] ) ) {
-		if ( $settings['square_small_crop'] == 'true' ) {
-			$sizes['square_small']['crop'] = true;
-		} else if ( $settings['square_small_crop'] == 'false' ) {
-			$sizes['square_small']['crop'] = false;
-		} else if ( $settings['square_small_crop'] == 'custom'  ) {
-			$sizes['square_small']['crop'] = array( $settings['square_small_x_crop_position'], $settings['square_small_y_crop_position'] );
-		}
-	}
-
-	// Smaller Squares
-
-	if ( isset( $settings['square_smaller_width'] ) && $settings['square_smaller_width'] ) {
-		$sizes['square_smaller']['width'] = $settings['square_smaller_width'];
-	}
-
-	if ( isset( $settings['square_smaller_height'] ) && $settings['square_smaller_height'] ) {
-		$sizes['square_smaller']['height'] = $settings['square_smaller_height'];
-	}
-
-	if ( isset( $settings['square_smaller_crop'] ) ) {
-		if ( $settings['square_smaller_crop'] == 'true' ) {
-			$sizes['square_smaller']['crop'] = true;
-		} else if ( $settings['square_smaller_crop'] == 'false' ) {
-			$sizes['square_smaller']['crop'] = false;
-		} else if ( $settings['square_smaller_crop'] == 'custom'  ) {
-			$sizes['square_smaller']['crop'] = array( $settings['square_smaller_x_crop_position'], $settings['square_smaller_y_crop_position'] );
-		}
-	}
-
-
-	// Smallest Squares
-
-	if ( isset( $settings['square_smallest_width'] ) && $settings['square_smallest_width'] ) {
-		$sizes['square_smallest']['width'] = $settings['square_smallest_width'];
-	}
-
-	if ( isset( $settings['square_smallest_height'] ) && $settings['square_smallest_height'] ) {
-		$sizes['square_smallest']['height'] = $settings['square_smallest_height'];
-	}
-
-	if ( isset( $settings['square_smallest_crop'] ) ) {
-		if ( $settings['square_smallest_crop'] == 'true' ) {
-			$sizes['square_smallest']['crop'] = true;
-		} else if ( $settings['square_smallest_crop'] == 'false' ) {
-			$sizes['square_smallest']['crop'] = false;
-		} else if ( $settings['square_smallest_crop'] == 'custom'  ) {
-			$sizes['square_smallest']['crop'] = array( $settings['square_smallest_x_crop_position'], $settings['square_smallest_y_crop_position'] );
-		}
-	}
-
-	return $sizes;
+	return apply_filters('tb_image_sizes', $sizes, $settings);
 }
 add_filter( 'themeblvd_image_sizes', 'tb_image_sizes_apply_changes', 999 );
