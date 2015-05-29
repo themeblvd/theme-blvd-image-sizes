@@ -35,7 +35,7 @@ define( 'TB_IMAGE_SIZES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
  * @since 1.0.3
  */
 function tb_image_sizes_textdomain() {
-	load_plugin_textdomain( 'theme-blvd-image-sizes', false, TB_IMAGE_SIZES_PLUGIN_DIR . '/lang' );
+	load_plugin_textdomain('theme-blvd-image-sizes');
 }
 add_action( 'init', 'tb_image_sizes_textdomain' );
 
