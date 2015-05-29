@@ -103,7 +103,7 @@ function tb_image_sizes_get_options() {
 			$crop = 'true';
 		}
 
-		$size = str_replace( '-', '_', $size );
+		$size = str_replace( '-', '', $size );
 
 		$options[] = array(
 			'name'		=> $atts['name'],
@@ -323,7 +323,7 @@ function tb_image_sizes_apply_changes( $sizes ) {
 
 	foreach ( $sizes as $size => $atts ) {
 
-		$key = str_replace( '-', '_', $size );
+		$key = str_replace( '-', '', $size );
 
 		if ( isset( $settings[$key.'_width'] ) && $settings[$key.'_width'] ) {
 			$sizes[$size]['width'] = $settings[$key.'_width'];
