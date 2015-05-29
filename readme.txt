@@ -2,27 +2,27 @@
 Contributors: themeblvd
 Tags: themeblvd, images, add_image_size, crop
 Requires at least: Theme Blvd Framework 2.2
-Stable tag: 1.0.6
+Stable tag: 1.1.0
 
-When using a theme with Theme Blvd framework version 2.1+, this plugin is will allow to change your theme's image sizes.
+When using a theme with Theme Blvd Framework version 2.2+, this plugin allows you to change your theme's image sizes.
 
 == Description ==
 
-When using a theme with Theme Blvd framework version 2.1+, this plugin is will provide you with a user-friendly interface to change your current theme's image sizes.
+When using a theme with Theme Blvd Framework version 2.2+, this plugin allows you to change your theme's image sizes.
 
 = Who is this plugin for? =
 
-This plugin is mainly designed for non-developers who feel they need to alter the image sizes for their theme, but do not have the necessary development knowledge to manually make the changes from their child theme.
+This plugin is mainly designed for non-developers who want to alter the image sizes for their Theme Blvd theme, but do not have the necessary development knowledge to manually make the changes from their child theme.
 
 = How does this plugin work? =
 
-As in any WordPress theme, we setup the image sizes by using WordPress's *add_image_size* function for each crop size. In the version 2.0.5 update to the Theme Blvd framework, we adjusted how we call the add_image_size function by first putting all image sizes into an array, which we applied the filter: *themeblvd_image_sizes*
+As in any WordPress theme, we setup the image sizes by using WordPress's *add_image_size* function for each crop size. However, before these images are registered, the Theme Blvd framework applies a filter to an array of the sizes to be registered.
 
-This allows for all of the image sizes of the theme to easily be filtered from your child theme or from a plugin... and this would be an example of a plugin that utilizes that. :-)
+This allows for all of the image sizes of the theme to be easily filtered from your child theme or from a plugin... and this would be an example of a plugin that utilizes that. :-)
 
 = Do I have to use this plugin to change image sizes? =
 
-Absolutely not. In fact, if you understand the basics of PHP and the WordPress filters API, I would suggest that you do not use this plugin and instead, you manually make the changes from your child theme. Realistically, running this plugin requires extra resources on your server that can be avoided by just manually make the change you want from your child theme.
+Nope. In fact, if you understand the basics of PHP and the WordPress filters API, I would suggest that you do not use this plugin and instead, you manually make the changes from your child theme’s *functions.php*. Realistically, running this plugin requires extra resources on your server that can be avoided by just manually make the change you want from your child theme.
 
 If you'd like to dive into a little development action, and accomplish the gist of what this plugin does, you'd simply do something like this from your child theme:
 
