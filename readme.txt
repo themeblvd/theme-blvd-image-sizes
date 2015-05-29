@@ -44,7 +44,6 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 == Screenshots ==
 
 1. Admin interface for plugin under *Tools > TB Image Sizes*.
-2. Contextual help included with plugin.
 
 == Changelog ==
 
