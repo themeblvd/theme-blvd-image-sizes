@@ -204,7 +204,8 @@ function tb_image_sizes_admin() {
 		'parent'		=> 'tools.php',
 		'page_title' 	=> __( 'Theme Blvd Image Sizes', 'theme-blvd-image-sizes' ),
 		'menu_title' 	=> __( 'TB Image Sizes', 'theme-blvd-image-sizes' ),
-		'cap'			=> apply_filters( 'tb_image_sizes_cap', 'edit_theme_options' )
+		'cap'			=> apply_filters( 'tb_image_sizes_cap', 'edit_theme_options' ),
+		'closer'		=> false // needed for framework 2.2-2.4, when options page has no tabs
 	);
 
 	$_tb_string_swap_admin = new Theme_Blvd_Options_Page( 'tb_image_sizes', tb_image_sizes_get_options(), $args );
