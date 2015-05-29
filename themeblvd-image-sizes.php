@@ -333,7 +333,7 @@ function tb_image_sizes_apply_changes( $sizes ) {
 			$sizes[$size]['height'] = $settings[$key.'_height'];
 		}
 
-		if ( isset( $settings['sliderlarge_crop'] ) ) {
+		if ( isset( $settings[$key.'_crop'] ) ) {
 			if ( $settings[$key.'_crop'] == 'true' ) {
 				$sizes[$size]['crop'] = true;
 			} else if ( $settings[$key.'_crop'] == 'false' ) {
