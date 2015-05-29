@@ -2,7 +2,7 @@
 /*
 Plugin Name: Theme Blvd Image Sizes
 Description: Adjust the image crop sizes in a Theme Blvd theme through your WordPress admin.
-Version: 1.0.5
+Version: 1.0.6
 Author: Jason Bobich
 Author URI: http://jasonbobich.com
 License: GPL2
@@ -25,7 +25,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'TB_IMAGE_SIZES_PLUGIN_VERSION', '1.0.5' );
+define( 'TB_IMAGE_SIZES_PLUGIN_VERSION', '1.0.6' );
 define( 'TB_IMAGE_SIZES_PLUGIN_DIR', dirname( __FILE__ ) );
 define( 'TB_IMAGE_SIZES_PLUGIN_URI', plugins_url( '' , __FILE__ ) );
 
