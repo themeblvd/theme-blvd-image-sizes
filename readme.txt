@@ -48,31 +48,31 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 == Changelog ==
 
-= 1.0.6 =
+= 1.0.6 - 05/29/2015 =
 
-= 1.0.5 =
+= 1.0.5 - 07/17/2014 =
 
 * Added selection for custom crop mode on all image sizes (requires WordPress 3.9+).
 
-= 1.0.4 =
+= 1.0.4 - 09/06/2013 =
 
 * Added control for Mini Post Grid/List thumbnail sizes.
 * Fixed issue with "Current Image Size" not showing for each image section.
 
-= 1.0.3 =
+= 1.0.3 - 09/19/2012 =
 
 * Added compatibility for framework v2.2.
 
-= 1.0.2 =
+= 1.0.2 - 07/02/2012 =
 
 * Fixed small thumbnail sizes to match new "tb_small" ID used by updated themes.
 
-= 1.0.1 =
+= 1.0.1 - 05/18/2012 =
 
 * Added high priority to filter so it happens after the theme runs. This is needed in conjunction with the [Theme Blvd Framework 2.1 update](http://www.wpjumpstart.com/framework-updates/theme-blvd-2-1-0-framework-update/).
 * On options page, adjusted changelog link at bottom to match Theme Blvd 2.1 framework's slightly modified format.
 * On options page, changed "Default Theme's Size" string to say "Current Image Size" as it actually reflects what the current image size is set to.
 
-= 1.0.0 =
+= 1.0.0 - 02/12/2012 =
 
 * This is the first release.
