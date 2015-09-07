@@ -39,15 +39,17 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 
 1. Upload `theme-blvd-image-sizes` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to *Tools > TB Image Sizes* to use.
+3. Go to *Appearance > Theme Image Sizes* to use.
 
 == Screenshots ==
 
-1. Admin interface for plugin under *Tools > TB Image Sizes*.
+1. Admin interface for plugin under *Appearance > Theme Image Sizes*.
 
 == Changelog ==
 
 = 1.1.1 - 09/07/2015 =
+
+* Admin page moved to *Appearance > Theme Image Sizes*.
 
 = 1.1.0 - 05/29/2015 =
 
