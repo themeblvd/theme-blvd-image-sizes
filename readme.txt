@@ -2,7 +2,7 @@
 Contributors: themeblvd
 Tags: themeblvd, images, add_image_size, crop
 Requires at least: Theme Blvd Framework 2.2
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 When using a theme with Theme Blvd Framework version 2.2+, this plugin allows you to change your theme's image sizes.
 
@@ -46,6 +46,8 @@ add_filter( 'themeblvd_image_sizes', 'my_image_sizes' );`
 1. Admin interface for plugin under *Tools > TB Image Sizes*.
 
 == Changelog ==
+
+= 1.1.1 - 09/07/2015 =
 
 = 1.1.0 - 05/29/2015 =
 
